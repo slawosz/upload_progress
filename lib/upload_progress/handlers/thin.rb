@@ -40,3 +40,17 @@ module UploadProgress
     end
   end
 end
+
+module Thin
+  class UploadProgressConnection < Connection
+    include UploadProgress::Handler::Thin
+  end
+end
+
+module Thin
+  module Backends
+    module UploadProgressBackend
+      @signature = EventMachine.start_server(@host, @port, Thin::UploadProgressConnection, &method(:initialize_connection))
+    end
+  end
+end

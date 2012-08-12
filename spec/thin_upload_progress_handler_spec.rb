@@ -101,6 +101,11 @@ describe UploadProgress::Handlers::Thin do
       subject.instance_eval { @uid }.should == nil
     end
 
+    it 'should not attempt to save progress' do
+      subject.receive_data('foo')
+      subject.instance_eval { @progress_data_manager }.should == nil
+    end
+    
   end
 
   def parsed_headers

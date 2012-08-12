@@ -31,6 +31,7 @@ module UploadProgress
       end
 
       def save_progress
+        return unless uid
         @progress_data_manager ||= begin
                                      ProgressDataManager.new(@uid)
                                    end

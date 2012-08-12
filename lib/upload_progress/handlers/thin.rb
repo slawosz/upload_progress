@@ -43,7 +43,7 @@ end
 
 module Thin
   class UploadProgressConnection < Connection
-    include UploadProgress::Handler::Thin
+    include UploadProgress::Handlers::Thin
   end
 end
 

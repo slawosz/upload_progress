@@ -49,7 +49,7 @@ end
 
 module Thin
   module Backends
-    module UploadProgressBackend
+    module UploadProgressBackend < TcpServer
       @signature = EventMachine.start_server(@host, @port, Thin::UploadProgressConnection, &method(:initialize_connection))
     end
   end

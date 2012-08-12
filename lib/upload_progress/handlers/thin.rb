@@ -50,6 +50,11 @@ end
 module Thin
   module Backends
     class UploadProgressBackend < TcpServer
+
+      def initialize(host, port, options)
+        super(host, port)
+      end
+      
       def connect
         @signature = EventMachine.start_server(@host, @port, Thin::UploadProgressConnection, &method(:initialize_connection))
       end

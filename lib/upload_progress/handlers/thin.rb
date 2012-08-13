@@ -26,7 +26,7 @@ module UploadProgress
         @uid ||= begin
                    q = @request.env['QUERY_STRING']
                    if q && q.length > 0
-                     @uid = @request.env['QUERY_STRING'].match(/uid=(\d+)/)[1].to_i
+                     @uid = UidParser.new(@request.env['QUERY_STRING']).parse
                    end
                  end
       end

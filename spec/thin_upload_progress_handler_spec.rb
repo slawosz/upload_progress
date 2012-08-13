@@ -66,14 +66,14 @@ describe UploadProgress::Handlers::Thin do
 
       it 'should get uid from request' do
         subject.receive_data('foo')
-        subject.instance_eval { @uid }.should == @request.env['X-UploadId']
+        subject.instance_eval { @uid }.should == @uid
       end
     end
     
 
     it 'should save actual progress' do
       manager = double
-      UploadProgress::ProgressDataManager.should_receive(:new).with(@request.env['X-UploadId']) do
+      UploadProgress::ProgressDataManager.should_receive(:new).with(@uid) do
         manager
       end
       manager.should_receive(:save).with(3)
@@ -109,7 +109,8 @@ describe UploadProgress::Handlers::Thin do
   end
 
   def parsed_headers
-    env = {'X-UploadId' => 123}
+    @uid = 123
+    env = {'QUERY_STRING' => "uid=#{@uid}"}
     @request = double(content_length: 100, env: env)
   end
   

@@ -24,8 +24,9 @@ module UploadProgress
 
       def uid
         @uid ||= begin
-                   if _uid = @request.env['X-UploadId']
-                     @uid = _uid
+                   q = @request.env['QUERY_STRING']
+                   if q && q.length > 0
+                     @uid = @request.env['QUERY_STRING'].match(/uid=(\d+)/)[1].to_i
                    end
                  end
       end

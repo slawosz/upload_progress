@@ -9,6 +9,6 @@ require 'stringio'
 require 'rack'
 
 module UploadProgress
-  ROOT_PATH = FileUtils.pwd
+  ROOT_PATH = "#{File.dirname(__FILE__)}/.."
   FILES_PATH = ROOT_PATH + '/public/files'
 end

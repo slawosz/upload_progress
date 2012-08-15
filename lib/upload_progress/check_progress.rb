@@ -4,7 +4,7 @@ module UploadProgress
     def call(env)
       uid = UidParser.new(env['QUERY_STRING']).parse
       progress = ProgressDataManager.new(uid).get
-      [200, {}, progress]
+      [200, {'Content-Type' => 'text/html'}, progress]
     end
       
   end

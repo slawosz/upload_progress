@@ -5,6 +5,7 @@ module UploadProgress
 
     def initialize(uid)
       @uid = uid
+      p uid
       @redis = Redis.new
     end
 

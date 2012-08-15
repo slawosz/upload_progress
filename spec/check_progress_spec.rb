@@ -13,6 +13,6 @@ describe UploadProgress::CheckProgress do
     end
     manager.should_receive(:get) { 25 }
     
-    subject.call(@env).should == [200, {'X-Progress' => 25}, nil]
+    subject.call(@env).should == [200, {}, 25]
   end
 end

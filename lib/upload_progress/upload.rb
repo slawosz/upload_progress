@@ -26,12 +26,13 @@ module UploadProgress
 
       def create_file
         file = @uploaded['files']
-        dir_name = UPLOADS_PATH + '/' + next_folder_num + '/'
-        file_path = dir_name + file[:filename]
+        new_dir = '/' + next_folder_num + '/'
+        new_location = new_dir + file[:filename]
+        FileUtils.mkdir(ROOT_PATH + UPLOADS_PATH + new_dir)
         
-        FileUtils.mkdir(ROOT_PATH + dir_name)
-        FileUtils.cp(file[:tempfile].path, ROOT_PATH + file_path)
-        file_path
+        move_to = UPLOADS_PATH + new_location
+        FileUtils.cp(file[:tempfile].path, ROOT_PATH + move_to)
+        PUBLIC_UPLOADS_PATH + new_location
       end
 
       private

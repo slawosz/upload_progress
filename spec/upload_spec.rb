@@ -6,25 +6,27 @@ describe UploadProgress::Upload do
     require 'pry'
     @env = {'rack.input' => StringIO.new(rack_input), 'CONTENT_TYPE' => content_type, 'CONTENT_LENGTH' => 551}
     @body_path = UploadProgress::ROOT_PATH + '/spec/fixtures/upload.html'
-    @spec_upload_path = '/spec/fixtures/uploads'
-    stub_const("UploadProgress::UPLOADS_PATH", @spec_upload_path)
+    @spec_uploads_path = '/spec/fixtures/uploads'
+    @spec_public_uploads_path = '/uploads'
+    stub_const("UploadProgress::UPLOADS_PATH", @spec_uploads_path)
+    stub_const("UploadProgress::PUBLIC_UPLOADS_PATH", @spec_public_uploads_path)
   end
 
-  after { FileUtils.rm_r(Dir.glob(UploadProgress::ROOT_PATH + @spec_upload_path + '/*')) }
+  after { FileUtils.rm_r(Dir.glob(UploadProgress::ROOT_PATH + @spec_uploads_path + '/*')) }
   
   subject { UploadProgress::Upload.new(@body_path) }
   
   it 'should return valid response' do
     status = 200
     headers = {}
-    body = "<html><span class='path'>#{@spec_upload_path}/1/fixture.txt</span></html>\n"
+    body = "<html><span class='path'>#{@spec_public_uploads_path}/1/fixture.txt</span></html>\n"
 
     subject.call(@env).should == [status, headers, body]
   end
 
   it 'should create directory for files properly' do
     3.times { subject.call(@env) }
-    `ls #{UploadProgress::ROOT_PATH}#{@spec_upload_path}`.split("\n").sort.should == %w(1 2 3)
+    `ls #{UploadProgress::ROOT_PATH}#{@spec_uploads_path}`.split("\n").sort.should == %w(1 2 3)
   end
 
   def rack_input

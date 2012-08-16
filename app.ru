@@ -1,4 +1,5 @@
-use Rack::Static, root: 'public', index: 'index.html'#, urls: { "/" => 'index.html' }
+use Rack::Static, root: 'public', index: 'index.html'
+
 run Rack::File.new(UploadProgress::ROOT_PATH + '/public')
 
 map '/upload' do

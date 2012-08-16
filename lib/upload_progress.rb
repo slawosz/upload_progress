@@ -10,5 +10,5 @@ require 'rack'
 
 module UploadProgress
   ROOT_PATH = "#{File.dirname(__FILE__)}/.."
-  FILES_PATH = ROOT_PATH + '/public/files'
+  UPLOADS_PATH = '/public/uploads'
 end

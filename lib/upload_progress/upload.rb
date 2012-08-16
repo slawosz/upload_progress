@@ -6,7 +6,7 @@ module UploadProgress
     end
 
     def call(env)
-      @file_path = FileManager.new(env).create_file
+      @env = env
       [200, {}, prepare_body]
     end
 
@@ -14,7 +14,8 @@ module UploadProgress
     
     def prepare_body
       body = File.read(@body_path)
-      body.gsub(/_FILE_PATH_/, @file_path)
+      file_path = FileManager.new(@env).create_file
+      body.gsub(/_FILE_PATH_/, file_path)
     end
 
     class FileManager
@@ -25,19 +26,23 @@ module UploadProgress
 
       def create_file
         file = @uploaded['files']
-        dir_name = FILES_PATH + '/' + next_folder_num + '/'
+        dir_name = UPLOADS_PATH + '/' + next_folder_num + '/'
         file_path = dir_name + file[:filename]
         
-        FileUtils.mkdir(dir_name)
-        FileUtils.cp(file[:tempfile].path, file_path)
+        FileUtils.mkdir(ROOT_PATH + dir_name)
+        FileUtils.cp(file[:tempfile].path, ROOT_PATH + file_path)
         file_path
       end
 
       private
 
       def next_folder_num
-        num  = (`ls #{FILES_PATH}`.split("\n").map(&:to_i).sort.last || 0) + 1
+        num  = (`ls #{uploads_path}`.split("\n").map(&:to_i).sort.last || 0) + 1
         num.to_s
+      end
+
+      def uploads_path
+        ROOT_PATH + UPLOADS_PATH
       end
       
     end

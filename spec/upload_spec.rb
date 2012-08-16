@@ -10,7 +10,7 @@ describe UploadProgress::Upload do
     stub_const("UploadProgress::UPLOADS_PATH", @spec_upload_path)
   end
 
-  after { p FileUtils.rm_r(Dir.glob(UploadProgress::ROOT_PATH + @spec_upload_path + '/*')) }
+  after { FileUtils.rm_r(Dir.glob(UploadProgress::ROOT_PATH + @spec_upload_path + '/*')) }
   
   subject { UploadProgress::Upload.new(@body_path) }
   

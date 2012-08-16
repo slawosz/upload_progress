@@ -13,6 +13,6 @@ describe UploadProgress::CheckProgress do
     end
     manager.should_receive(:get) { 25 }
     
-    subject.call(@env).should == [200, {'Content-Type' => 'text/html'}, 25]
+    subject.call(@env).should == [200, {'Date' => Time.now.to_s, 'Content-Length' => 2, 'Content-Type' => 'text/html'}, 25]
   end
 end

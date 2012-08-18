@@ -3,9 +3,7 @@ require 'spec_helper'
 describe UploadProgress::Upload do
 
   before do
-    require 'pry'
-    @env = {'rack.input' => StringIO.new(rack_input), 'CONTENT_TYPE' => content_type, 'CONTENT_LENGTH' => 551}
-    @body_path = UploadProgress::ROOT_PATH + '/spec/fixtures/upload.html'
+    @env = {'rack.input' => StringIO.new(rack_input), 'CONTENT_TYPE' => content_type, 'CONTENT_LENGTH' => 551, 'QUERY_STRING' => 'uid=666'}
     @spec_uploads_path = '/spec/fixtures/uploads'
     @spec_public_uploads_path = '/uploads'
     stub_const("UploadProgress::UPLOADS_PATH", @spec_uploads_path)
@@ -14,17 +12,21 @@ describe UploadProgress::Upload do
 
   after { FileUtils.rm_r(Dir.glob(UploadProgress::ROOT_PATH + @spec_uploads_path + '/*')) }
   
-  subject { UploadProgress::Upload.new(@body_path) }
+  subject { UploadProgress::Upload.new }
   
   it 'should return valid response' do
+    set_data_expectations_and_mocks
+    
     status = 200
     headers = {}
-    body = "<html><span class='path'>#{@spec_public_uploads_path}/1/fixture.txt</span></html>\n"
+    body = 'body'
 
     subject.call(@env).should == [status, headers, body]
   end
-
+  
   it 'should create directory for files properly' do
+    stub_const('UploadProgress::DescriptionManager', FakeManager)
+    stub_const('UploadProgress::UploadedPresenter', FakeUploadedPresenter)
     3.times { subject.call(@env) }
     `ls #{UploadProgress::ROOT_PATH}#{@spec_uploads_path}`.split("\n").sort.should == %w(1 2 3)
   end
@@ -35,6 +37,22 @@ describe UploadProgress::Upload do
   
   def content_type
     "multipart/form-data; boundary=---------------------------150047573721210644961878570988"
+  end
+
+  def set_data_expectations_and_mocks
+    manager = double
+    description = double
+    UploadProgress::DescriptionManager.should_receive(:new) { manager }
+    manager.should_receive(:get) { description }
+
+    up = double
+    UploadProgress::UploadedPresenter.should_receive(:new).with(UploadProgress::PUBLIC_UPLOADS_PATH + '/1/fixture.txt', description) { up }
+    up.should_receive(:body) { 'body' }
+  end
+
+  class FakeUploadedPresenter
+    def initialize(*); end
+    def body; end
   end
   
 end

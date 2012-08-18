@@ -3,7 +3,7 @@ use Rack::Static, root: 'public', index: 'index.html'
 run Rack::File.new(UploadProgress::ROOT_PATH + '/public')
 
 map '/upload' do
-  run UploadProgress::Upload.new(File.dirname(__FILE__) + '/upload_result.html')
+  run UploadProgress::Upload.new
 end
 
 map '/progress' do

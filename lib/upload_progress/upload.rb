@@ -1,25 +1,31 @@
+require 'rack/multipart'
+
 module UploadProgress
   class Upload
 
-    def initialize(body_path)
-      @body_path = body_path
-    end
-
     def call(env)
       @env = env
+      @uid = UidParser.new(env['QUERY_STRING']).parse
+      process_upload
       [200, {}, prepare_body]
     end
 
     private
+
+    def process_upload
+      @file_manager = FileManager.new(@env)
+      @file_manager.create_file
+    end
     
     def prepare_body
-      body = File.read(@body_path)
-      file_path = FileManager.new(@env).create_file
-      body.gsub(/_FILE_PATH_/, file_path)
+      description = DescriptionManager.new(@uid).get
+      UploadedPresenter.new(@file_manager.public_path, description).body
     end
 
     class FileManager
 
+      attr_reader :public_path
+      
       def initialize(env)
         @uploaded = Rack::Multipart.parse_multipart(env)
       end
@@ -32,7 +38,7 @@ module UploadProgress
         
         move_to = UPLOADS_PATH + new_location
         FileUtils.cp(file[:tempfile].path, ROOT_PATH + move_to)
-        PUBLIC_UPLOADS_PATH + new_location
+        @public_path = PUBLIC_UPLOADS_PATH + new_location
       end
 
       private

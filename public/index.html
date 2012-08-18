@@ -1,0 +1,44 @@
+<html>
+  <head>
+    <title>Super Upload</title>
+    <script language="javascript" type="text/javascript">
+      var progressUpdater;
+
+      function check_progress(uid) {
+        xhr = new XMLHttpRequest();
+        xhr.open('GET','http://slawosz.com:8080/progress?uid=666',true);
+        xhr.onreadystatechange = function(response) {
+          if (xhr.readyState == 4) {
+            display_percent(xhr.responseText);
+          }
+        }
+        xhr.send()
+      }
+
+      function trace_progress(uid) {
+        progressUpdater = setInterval( 
+          function() {
+            check_progress(uid);
+          },
+          1000
+        )
+      }
+ 
+      function display_percent(value) {
+        document.getElementById('progress').innerHTML = value + '%';
+      }
+    </script>
+  </head>
+  <body>
+    <form target='uploader' action="http://slawosz.com:8080/upload?uid=666" enctype="multipart/form-data" method="post">
+      <input type="file" name="files" onChange="console.log(this.value)"><BR>
+      <input type="hidden" value="666" name="uploadid" />
+      <input type="submit" value="Send" onClick="trace_progress('666')"><input type="reset">
+    </form>
+    <div id="link"></div>
+    <div id="progress">
+      Select file to start upload.
+    </div>
+    <iframe name='uploader'/>
+  </body>
+</html>

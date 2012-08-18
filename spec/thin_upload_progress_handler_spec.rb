@@ -13,30 +13,18 @@ class BaseConnection
   
 end
 
-class FakeProgressDataManager
-  def initialize(arg)
-  end
-  
-  def save(arg)
-  end
-end
-
 class FooConnection < BaseConnection
   include UploadProgress::Handlers::Thin
 end
 
 describe UploadProgress::Handlers::Thin do
 
-  before do
-#    stub_const("UploadProgress::ProgressDataManager", FakeProgressDataManager)
-  end
-  
   subject do
     FooConnection.new(@request)
   end
 
   it 'should call #receive_data from super' do
-    stub_const("UploadProgress::ProgressDataManager", FakeProgressDataManager)
+    stub_const("UploadProgress::ProgressDataManager", FakeManager)
     
     parsed_headers
     
@@ -49,7 +37,7 @@ describe UploadProgress::Handlers::Thin do
 
     context do
       
-      before { stub_const("UploadProgress::ProgressDataManager", FakeProgressDataManager) }
+      before { stub_const("UploadProgress::ProgressDataManager", FakeManager) }
       
       it 'should update progress' do
         subject.receive_data('foo')
@@ -87,7 +75,7 @@ describe UploadProgress::Handlers::Thin do
 
     before do
       unparsed_headers
-      stub_const("UploadProgress::ProgressDataManager", FakeProgressDataManager)
+      stub_const("UploadProgress::ProgressDataManager", FakeManager)
     end
     
     it 'should not calculate progress' do

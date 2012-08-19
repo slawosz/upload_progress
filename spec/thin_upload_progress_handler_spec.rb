@@ -97,7 +97,7 @@ describe UploadProgress::Handlers::Thin do
   end
 
   def parsed_headers
-    @uid = 123
+    @uid = '123'
     env = {'QUERY_STRING' => "uid=#{@uid}"}
     @request = double(content_length: 100, env: env)
   end

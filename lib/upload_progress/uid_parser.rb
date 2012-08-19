@@ -6,7 +6,7 @@ module UploadProgress
     end
 
     def parse
-      @uid.match(/uid=(\d+)/)[1].to_i
+      @uid.match(/uid=(\d+)/)[1]
     end
   end
 end

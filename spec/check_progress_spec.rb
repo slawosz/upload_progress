@@ -8,7 +8,7 @@ describe UploadProgress::CheckProgress do
   
   it 'should return progress in header' do
     manager = double
-    UploadProgress::ProgressDataManager.should_receive(:new).with(666) do
+    UploadProgress::ProgressDataManager.should_receive(:new).with('666') do
       manager
     end
     manager.should_receive(:get) { 25 }

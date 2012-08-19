@@ -3,7 +3,7 @@ require 'spec_helper'
 describe UploadProgress::Upload do
 
   before do
-    @env = {'rack.input' => StringIO.new(rack_input), 'CONTENT_TYPE' => content_type, 'CONTENT_LENGTH' => 551, 'QUERY_STRING' => 'uid=666'}
+    @env = {'rack.input' => StringIO.new(rack_input), 'CONTENT_TYPE' => content_type, 'CONTENT_LENGTH' => 551, 'X-UploadId' => '666'}
     @spec_uploads_path = '/spec/fixtures/uploads'
     @spec_public_uploads_path = '/uploads'
     stub_const("UploadProgress::UPLOADS_PATH", @spec_uploads_path)

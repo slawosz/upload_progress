@@ -2,10 +2,11 @@ require 'rack/multipart'
 
 module UploadProgress
   class Upload
+    include HasUid
 
     def call(env)
       @env = env
-      @uid = UidParser.new(env['QUERY_STRING']).parse
+      @uid = get_uid(@env)
       process_upload
       [200, {}, prepare_body]
     end

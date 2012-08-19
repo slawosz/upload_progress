@@ -22,21 +22,22 @@ module UploadProgress
         @progress = UploadCalculator.new(@uploaded, @request.content_length).calculate
       end
 
-      def uid
-        @uid ||= begin
-                   q = @request.env['QUERY_STRING']
-                   if q && q.length > 0
-                     @uid = UidParser.new(@request.env['QUERY_STRING']).parse
-                   end
-                 end
-      end
-
       def save_progress
         return unless uid
         @progress_data_manager ||= begin
                                      ProgressDataManager.new(@uid)
                                    end
         @progress_data_manager.save(@progress)        
+      end
+      
+      def uid
+        @uid ||= begin
+                   q = @request.env['QUERY_STRING']
+                   if q && q.length > 0
+                     @uid = UidParser.new(@request.env['QUERY_STRING']).parse
+                     @request.env['X-UploadId'] = @uid
+                   end
+                 end
       end
 
     end

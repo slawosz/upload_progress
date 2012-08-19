@@ -2,7 +2,7 @@ require 'spec_helper'
 
 describe UploadProgress::CheckProgress do
 
-  before { @env = {'QUERY_STRING' => 'uid=666'} }
+  before { @env = {'X-UploadId' => '666'} }
   
   subject { UploadProgress::CheckProgress.new }
   

@@ -30,7 +30,7 @@ describe UploadProgress::Handlers::Thin do
     
     subject.receive_data('foo').should == :ok
   end
-  
+
   describe 'when headers are available' do
     
     before { parsed_headers }
@@ -40,11 +40,16 @@ describe UploadProgress::Handlers::Thin do
       before { stub_const("UploadProgress::ProgressDataManager", FakeManager) }
       
       it 'should update progress' do
-        subject.receive_data('foo')
+        subject.receive_data('foo') # foo.length == 3
 
         subject.instance_eval { @progress }.should == 3
       end
+  
+      it 'should set X-UploadId header' do
+        subject.receive_data('foo') # foo.length == 3
 
+        subject.request.env['X-UploadId'].should == '666'
+      end
       
       it 'should summarize reciving data' do
         3.times { subject.receive_data('foo') }
@@ -97,7 +102,7 @@ describe UploadProgress::Handlers::Thin do
   end
 
   def parsed_headers
-    @uid = '123'
+    @uid = '666'
     env = {'QUERY_STRING' => "uid=#{@uid}"}
     @request = double(content_length: 100, env: env)
   end

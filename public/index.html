@@ -3,42 +3,54 @@
     <title>Super Upload</title>
     <script language="javascript" type="text/javascript">
       var progressUpdater;
+      var formActionUrl = 'http://slawosz.com:8080/upload?uid='
 
-      function check_progress(uid) {
+      function submitForm(form) {
+        uid = setUid();
+        form.action = formActionUrl + uid;
+        form.submit();
+        traceProgress(uid);
+      }
+
+      function traceProgress(uid) {
+        displayPercent(0);
+        checkProgress(uid);
+        progressUpdater = setInterval( 
+          function() {
+            checkProgress(uid);
+          },
+          1000
+        )
+      }
+
+      function checkProgress(uid) {
         xhr = new XMLHttpRequest();
-        xhr.open('GET','http://slawosz.com:8080/progress?uid=666',true);
-        xhr.onreadystatechange = function(response) {
+        xhr.open('GET','http://slawosz.com:8080/progress?uid=' + uid, true);
+        xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            display_percent(xhr.responseText);
+            displayPercent(xhr.responseText);
           }
         }
         xhr.send()
       }
 
-      function trace_progress(uid) {
-        progressUpdater = setInterval( 
-          function() {
-            check_progress(uid);
-          },
-          1000
-        )
+      function displayPercent(value) {
+        document.getElementById('progress').innerHTML = 'Status: ' + value + '%';
       }
- 
-      function display_percent(value) {
-        document.getElementById('progress').innerHTML = value + '%';
+
+      function setUid() {
+        return new Date().getTime();
       }
     </script>
   </head>
   <body>
-    <form target='uploader' action="http://slawosz.com:8080/upload?uid=666" enctype="multipart/form-data" method="post">
-      <input type="file" name="files" onChange="console.log(this.value)"><BR>
-      <input type="hidden" value="666" name="uploadid" />
-      <input type="submit" value="Send" onClick="trace_progress('666')"><input type="reset">
+    <form target='uploader' enctype="multipart/form-data" method="post">
+      <input type="file" name="files" onChange="submitForm(this.form)"><BR>
     </form>
     <div id="link"></div>
     <div id="progress">
       Select file to start upload.
     </div>
-    <iframe name='uploader'/>
+    <iframe name='uploader' style='display: none'/>
   </body>
 </html>

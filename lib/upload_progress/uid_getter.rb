@@ -6,8 +6,7 @@ module UploadProgress
 
     def call(env)
       uid = UidParser.new(env['QUERY_STRING']).parse
-      status, env, body = @app.call(env)
-      [status, env.merge('X-UploadId' => uid), body]
+      @app.call(env.merge('X-UploadId' => uid))
     end
     
   end

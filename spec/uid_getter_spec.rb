@@ -4,11 +4,14 @@ describe UploadProgress::UidGetter do
   
   it 'should pass uid to headers' do
     u = UploadProgress::UidGetter.new(app)
-    u.call(env).should == [200, {'QUERY_STRING' => 'uid=666', 'X-UploadId' => '666'}, 'body']
+    expect { u.call(env) }.to_not raise_error(RuntimeError)
   end
 
   def app
-    lambda {|env| [200, {'QUERY_STRING' => 'uid=666'}, 'body'] }
+    lambda do |env|
+      raise unless env['X-UploadId']
+      [200, env, 'body']
+    end
   end
 
   def env

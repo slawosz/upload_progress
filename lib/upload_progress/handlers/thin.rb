@@ -35,7 +35,6 @@ module UploadProgress
                    q = @request.env['QUERY_STRING']
                    if q && q.length > 0
                      UidParser.new(@request.env['QUERY_STRING']).parse
-
                    end
                  end
       end

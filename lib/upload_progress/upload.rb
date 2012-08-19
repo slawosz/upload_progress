@@ -6,6 +6,7 @@ module UploadProgress
 
     def call(env)
       @env = env
+      p env
       @uid = get_uid(@env)
       process_upload
       [200, {}, prepare_body]

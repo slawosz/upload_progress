@@ -1,4 +1,14 @@
 require 'spec_helper'
+class FakeRequest
+  attr_reader :env
+  attr_reader :content_length
+
+  def initialize(env, length)
+    @env = env
+    @content_length = length
+  end
+  
+end
 
 class BaseConnection
   attr_reader :request
@@ -45,12 +55,6 @@ describe UploadProgress::Handlers::Thin do
         subject.instance_eval { @progress }.should == 3
       end
   
-      it 'should set X-UploadId header' do
-        subject.receive_data('foo') # foo.length == 3
-
-        subject.request.env['X-UploadId'].should == '666'
-      end
-      
       it 'should summarize reciving data' do
         3.times { subject.receive_data('foo') }
 
@@ -104,12 +108,12 @@ describe UploadProgress::Handlers::Thin do
   def parsed_headers
     @uid = '666'
     env = {'QUERY_STRING' => "uid=#{@uid}"}
-    @request = double(content_length: 100, env: env)
+    @request = FakeRequest.new(env, 100)
   end
   
   def unparsed_headers
     env = {}
-    @request = double(content_length: 0, env: env)
+    @request = FakeRequest.new(env, 0)
   end
 
 end

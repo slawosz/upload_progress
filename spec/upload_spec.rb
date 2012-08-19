@@ -27,8 +27,10 @@ describe UploadProgress::Upload do
   it 'should create directory for files properly' do
     stub_const('UploadProgress::DescriptionManager', FakeManager)
     stub_const('UploadProgress::UploadedPresenter', FakeUploadedPresenter)
-    3.times { subject.call(@env) }
-    `ls #{UploadProgress::ROOT_PATH}#{@spec_uploads_path}`.split("\n").sort.should == %w(1 2 3)
+    
+    names = %w( 123 231 312 )
+    names.each { |name| subject.call(@env.merge('X-UploadId' => name)) }
+    `ls #{UploadProgress::ROOT_PATH}#{@spec_uploads_path}`.split("\n").sort.should == names
   end
 
   def rack_input
@@ -46,7 +48,7 @@ describe UploadProgress::Upload do
     manager.should_receive(:get) { description }
 
     up = double
-    UploadProgress::UploadedPresenter.should_receive(:new).with(UploadProgress::PUBLIC_UPLOADS_PATH + '/1/fixture.txt', description) { up }
+    UploadProgress::UploadedPresenter.should_receive(:new).with(UploadProgress::PUBLIC_UPLOADS_PATH + '/666/fixture.txt', description) { up }
     up.should_receive(:body) { 'body' }
   end
 

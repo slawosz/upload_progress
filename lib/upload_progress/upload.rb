@@ -24,16 +24,18 @@ module UploadProgress
     end
 
     class FileManager
+      include HasUid
 
       attr_reader :public_path
       
       def initialize(env)
+        @env = env
         @uploaded = Rack::Multipart.parse_multipart(env)
       end
 
       def create_file
         file = @uploaded['files']
-        new_dir = '/' + next_folder_num + '/'
+        new_dir = '/' + get_uid(@env) + '/'
         new_location = new_dir + file[:filename]
         FileUtils.mkdir(ROOT_PATH + UPLOADS_PATH + new_dir)
         
@@ -43,11 +45,6 @@ module UploadProgress
       end
 
       private
-
-      def next_folder_num
-        num  = (`ls #{uploads_path}`.split("\n").map(&:to_i).sort.last || 0) + 1
-        num.to_s
-      end
 
       def uploads_path
         ROOT_PATH + UPLOADS_PATH

@@ -1,17 +1,23 @@
 module UploadProgress
   class TemplateRenderer
     
-    def initialize(template_path, path, description)
-      @template_path = template_path
-      @path = path
-      @description = description
+    def initialize(uid)
+      @uid = uid
     end
 
-    def render
-      body = File.read(@template_path)
-      body.gsub!('_FILE_PATH_', @path)
-      body.gsub!('_DESCRIPTION_', @description)
+    def render(template_path)
+      body = File.read(template_path)
+      body.gsub!('_FILE_PATH_', path)
+      body.gsub!('_DESCRIPTION_', description)
       body
+    end
+
+    def path
+      PUBLIC_UPLOADS_PATH + '/' + @uid.to_s + '/' + UploadedFileManager.new(@uid).get
+    end
+
+    def description
+      DescriptionManager.new(@uid).get
     end
     
   end

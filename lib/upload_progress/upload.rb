@@ -20,7 +20,7 @@ module UploadProgress
     
     def prepare_body
       description = DescriptionManager.new(@uid).get
-      TemplateRenderer.new(TEMPLATE, @file_manager.public_path, description).render
+      TemplateRenderer.new(@uid).render(TEMPLATE)
     end
 
     class FileManager
@@ -35,7 +35,7 @@ module UploadProgress
 
       def create_file
         file = @uploaded['files']
-        save_file
+        save_file_name
         new_dir = '/' + get_uid(@env) + '/'
         new_location = new_dir + file[:filename]
         FileUtils.mkdir(ROOT_PATH + UPLOADS_PATH + new_dir)
@@ -47,12 +47,8 @@ module UploadProgress
 
       private
 
-      def save_file
+      def save_file_name
         UploadedFileManager.new(get_uid(@env)).save(@uploaded['files'][:filename])
-      end
-      
-      def uploads_path
-        ROOT_PATH + UPLOADS_PATH
       end
       
     end

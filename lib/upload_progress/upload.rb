@@ -35,6 +35,7 @@ module UploadProgress
 
       def create_file
         file = @uploaded['files']
+        save_file
         new_dir = '/' + get_uid(@env) + '/'
         new_location = new_dir + file[:filename]
         FileUtils.mkdir(ROOT_PATH + UPLOADS_PATH + new_dir)
@@ -46,6 +47,10 @@ module UploadProgress
 
       private
 
+      def save_file
+        UploadedFileManager.new(get_uid(@env)).save(@uploaded['files'][:filename])
+      end
+      
       def uploads_path
         ROOT_PATH + UPLOADS_PATH
       end

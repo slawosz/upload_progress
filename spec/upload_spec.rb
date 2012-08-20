@@ -26,7 +26,7 @@ describe UploadProgress::Upload do
   
   it 'should create directory for files properly' do
     stub_const('UploadProgress::DescriptionManager', FakeManager)
-    stub_const('UploadProgress::UploadedPresenter', FakeUploadedPresenter)
+    stub_const('UploadProgress::TemplateRenderer', FakeTemplateRenderer)
     
     names = %w( 123 231 312 )
     names.each { |name| subject.call(@env.merge('X-UploadId' => name)) }
@@ -48,13 +48,13 @@ describe UploadProgress::Upload do
     manager.should_receive(:get) { description }
 
     up = double
-    UploadProgress::UploadedPresenter.should_receive(:new).with(UploadProgress::PUBLIC_UPLOADS_PATH + '/666/fixture.txt', description) { up }
-    up.should_receive(:body) { 'body' }
+    UploadProgress::TemplateRenderer.should_receive(:new).with(UploadProgress::TEMPLATE, UploadProgress::PUBLIC_UPLOADS_PATH + '/666/fixture.txt', description) { up }
+    up.should_receive(:render) { 'body' }
   end
 
-  class FakeUploadedPresenter
+  class FakeTemplateRenderer
     def initialize(*); end
-    def body; end
+    def render; end
   end
   
 end

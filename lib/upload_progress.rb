@@ -6,8 +6,8 @@ require_relative 'upload_progress/description_manager.rb'
 require_relative 'upload_progress/check_progress.rb'
 require_relative 'upload_progress/uid_parser.rb'
 require_relative 'upload_progress/upload.rb'
+require_relative 'upload_progress/template_renderer.rb'
 require_relative 'upload_progress/uid_getter.rb'
-require_relative 'upload_progress/uploaded_presenter.rb'
 require_relative 'upload_progress/handlers/thin'
 
 module UploadProgress

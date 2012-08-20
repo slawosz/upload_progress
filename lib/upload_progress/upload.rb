@@ -20,7 +20,7 @@ module UploadProgress
     
     def prepare_body
       description = DescriptionManager.new(@uid).get
-      UploadedPresenter.new(@file_manager.public_path, description).body
+      TemplateRenderer.new(TEMPLATE, @file_manager.public_path, description).render
     end
 
     class FileManager

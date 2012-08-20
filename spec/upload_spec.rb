@@ -53,13 +53,13 @@ describe UploadProgress::Upload do
     uploaded_file_manager.should_receive(:save).with('fixture.txt')
 
     up = double
-    UploadProgress::TemplateRenderer.should_receive(:new).with(UploadProgress::TEMPLATE, UploadProgress::PUBLIC_UPLOADS_PATH + '/666/fixture.txt', description) { up }
-    up.should_receive(:render) { 'body' }
+    UploadProgress::TemplateRenderer.should_receive(:new).with('666') { up }
+    up.should_receive(:render).with(UploadProgress::TEMPLATE) { 'body' }
   end
 
   class FakeTemplateRenderer
     def initialize(*); end
-    def render; end
+    def render(*); end
   end
   
 end

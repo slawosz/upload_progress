@@ -10,4 +10,6 @@ map '/progress' do
   run UploadProgress::CheckProgress.new
 end
 
-
+map '/description' do
+  run UploadProgress::Description.new
+end

@@ -3,6 +3,7 @@ use UploadProgress::UidGetter
 run Rack::File.new(UploadProgress::ROOT_PATH + '/public')
 
 map '/upload' do
+  use UploadProgress::SmallUploadProgress
   run UploadProgress::Upload.new
 end
 

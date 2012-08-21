@@ -3,20 +3,23 @@ require 'spec_helper'
 describe UploadProgress::Description do
 
   subject { UploadProgress::Description.new }
-  
+
   before do
     progress_manager = double
     UploadProgress::ProgressDataManager.stub(:new) { progress_manager }
     progress_manager.should_receive(:get) { progress }
     
     stub_const(template_const, fixture_path)
-    stub_const("UploadProgress::PUBLIC_UPLOADS_PATH", '/uploads')
+    
+    description_manager = double
+    UploadProgress::DescriptionManager.stub(:new).with('666') { description_manager }
+    description_manager.should_receive(:save).with('foo bar')
 
     renderer = double
     UploadProgress::TemplateRenderer.should_receive(:new).with('666') { renderer }
     renderer.should_receive(:render).with(constantize(template_const)) { response }
   end
-  
+
   context 'when upload finished' do
     let(:progress) { '100' }
     let(:template_const) { 'UploadProgress::DESCRIPTION_TEMPLATE' }
@@ -25,7 +28,7 @@ describe UploadProgress::Description do
 
     it 'should return proper body' do
       status, _env, body = subject.call(env)
-      
+
       status.should == 200
       _env.should == {}
       body.should == 'body'
@@ -52,13 +55,16 @@ describe UploadProgress::Description do
   end
 
   def env
-    {'X-UploadId' => '666'}
+    {
+      'X-UploadId'   => '666',
+     'CONTENT_TYPE' => 'multipart/form-data; boundary=---------------------------18082441091101135728769216843',
+     'rack.input'   => StringIO.new(rack_input),
+     'CONTENT_LENGTH' => 185
+    }
   end
-  
-  def set_data_expectations_and_mocks
 
-
-
+  def rack_input
+    "-----------------------------18082441091101135728769216843\r\nContent-Disposition: form-data; name=\"description\"\r\n\r\nfoo bar\r\n-----------------------------18082441091101135728769216843--\r\n"
   end
 
 end

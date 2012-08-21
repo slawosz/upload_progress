@@ -1,31 +1,35 @@
+<!DOCTYPE html>
 <html>
   <head>
     <title>Super Upload</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script language="javascript" type="text/javascript">
       var progressUpdater;
       var formActionUrl = 'http://slawosz.com:8080/upload?uid='
+      var currentUid;
 
       function submitForm(form) {
-        uid = setUid();
-        form.action = formActionUrl + uid;
+        setUid();
+        form.action = formActionUrl + currentUid;
         form.submit();
-        traceProgress(uid);
+        enableDescriptionEditing();
+        traceProgress(currentUid);
       }
 
-      function traceProgress(uid) {
+      function traceProgress() {
         displayPercent(0);
-        checkProgress(uid);
+        checkProgress(currentUid);
         progressUpdater = setInterval( 
           function() {
-            checkProgress(uid);
+            checkProgress(currentUid);
           },
           1000
         )
       }
 
-      function checkProgress(uid) {
+      function checkProgress() {
         xhr = new XMLHttpRequest();
-        xhr.open('GET','http://slawosz.com:8080/progress?uid=' + uid, true);
+        xhr.open('GET','http://slawosz.com:8080/progress?uid=' + currentUid, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             displayPercent(xhr.responseText);
@@ -39,7 +43,25 @@
       }
 
       function setUid() {
-        return new Date().getTime();
+        currentUid = new Date().getTime();
+        return currentUid;
+      }
+
+      function enableDescriptionEditing() {
+        document.getElementById('submit-description').disabled = false;
+      }
+
+      function submitDescription(form) {
+        var xhr = new XMLHttpRequest();
+        xhr.open('POST', '/description?uid=' + currentUid, true);
+        formData = new FormData(form);
+        xhr.onreadystatechange = function() {
+          if (xhr.readyState == 4) {
+            eval(xhr.responseText);
+          }
+        }
+        xhr.send(formData);
+        return false;
       }
     </script>
   </head>
@@ -51,6 +73,12 @@
     <div id="progress">
       Select file to start upload.
     </div>
+    <div id="description">
+    </div>
+    <form method="post" onSubmit="return submitDescription(this)">
+      <textarea id='description' name='description'></textarea>
+      <input type="submit" id="submit-description" disabled="true"/>
+    </form>
     <iframe name='uploader' style='display: none'/>
   </body>
 </html>

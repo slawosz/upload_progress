@@ -12,6 +12,8 @@
         setUid();
         form.action = formActionUrl + currentUid;
         form.submit();
+        document.getElementById('link').innerHTML = '';
+        document.getElementById('description').innerHTML = '';
         enableDescriptionEditing();
         traceProgress(currentUid);
       }

@@ -5,15 +5,13 @@
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <script language="javascript" type="text/javascript">
       var progressUpdater;
-      var formActionUrl = 'http://slawosz.com:8080/upload?uid='
+      var formActionUrl = '/upload?uid='
       var currentUid;
 
       function submitForm(form) {
         setUid();
         form.action = formActionUrl + currentUid;
         form.submit();
-        document.getElementById('link').innerHTML = '';
-        document.getElementById('description').innerHTML = '';
         enableDescriptionEditing();
         traceProgress(currentUid);
       }
@@ -31,7 +29,7 @@
 
       function checkProgress() {
         xhr = new XMLHttpRequest();
-        xhr.open('GET','http://slawosz.com:8080/progress?uid=' + currentUid, true);
+        xhr.open('GET','/progress?uid=' + currentUid, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             displayPercent(xhr.responseText);

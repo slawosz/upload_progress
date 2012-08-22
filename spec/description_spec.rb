@@ -57,14 +57,8 @@ describe UploadProgress::Description do
   def env
     {
       'X-UploadId'   => '666',
-     'CONTENT_TYPE' => 'multipart/form-data; boundary=---------------------------18082441091101135728769216843',
-     'rack.input'   => StringIO.new(rack_input),
-     'CONTENT_LENGTH' => 185
+     'rack.input'   => StringIO.new('description=foo bar'),
     }
-  end
-
-  def rack_input
-    "-----------------------------18082441091101135728769216843\r\nContent-Disposition: form-data; name=\"description\"\r\n\r\nfoo bar\r\n-----------------------------18082441091101135728769216843--\r\n"
   end
 
 end

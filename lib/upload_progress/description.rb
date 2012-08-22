@@ -8,7 +8,7 @@ module UploadProgress
 
       save_description
       
-      renderer  = TemplateRenderer.new(@uid)
+      renderer = TemplateRenderer.new(@uid)
       if ProgressDataStore.new(@uid).get == '100'
         return [200, {}, renderer.render(DESCRIPTION_TEMPLATE)]
       else
@@ -24,7 +24,9 @@ module UploadProgress
     end
 
     def description
-      Rack::Multipart.parse_multipart(@env)["description"]
+      @env['rack.input'].read.match(/description=(.*)/)[1]
+    rescue
+      nil
     end
     
   end

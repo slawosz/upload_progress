@@ -26,6 +26,7 @@ describe UploadProgress::Upload do
   
   it 'should create directory for files properly' do
     stub_const('UploadProgress::DescriptionStore', FakeStore)
+    stub_const('UploadProgress::ProgressDataStore', FakeStore)
     stub_const('UploadProgress::TemplateRenderer', FakeTemplateRenderer)
     
     names = %w( 123 231 312 )

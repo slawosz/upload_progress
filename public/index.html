@@ -28,14 +28,20 @@
       }
 
       function checkProgress() {
-        xhr = new XMLHttpRequest();
+        xhr = null;
+        xhr = new window.XMLHttpRequest();
         xhr.open('GET','/progress?uid=' + currentUid, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            displayPercent(xhr.responseText);
+            percent = xhr.responseText;
+            displayPercent(percent);
           }
-        }
-        xhr.send()
+        };
+        xhr.setRequestHeader("If-Modified-Since","Sat, 1 Jan 2000 00:00:00 GMT");
+        d = new Date();
+        t = d.getTime();
+        thetimestring = t.toString(10);
+        xhr.send(thetimestring); 
       }
 
       function displayPercent(value) {

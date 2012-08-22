@@ -29,22 +29,23 @@ end
 
 describe UploadProgress::Handlers::Thin do
 
+  let(:uid) { '666' }
+  let(:env) { {'QUERY_STRING' => "uid=#{uid}"} }
+  let(:content_length) { 100 }
+  let(:request) { FakeRequest.new(env, content_length) }
+    
   subject do
-    FooConnection.new(@request)
+    FooConnection.new(request)
   end
 
   it 'should call #receive_data from super' do
     stub_const("UploadProgress::ProgressDataStore", FakeStore)
-    
-    parsed_headers
     
     subject.receive_data('foo').should == :ok
   end
 
   describe 'when headers are available' do
     
-    before { parsed_headers }
-
     context do
       
       before { stub_const("UploadProgress::ProgressDataStore", FakeStore) }
@@ -63,14 +64,14 @@ describe UploadProgress::Handlers::Thin do
 
       it 'should get uid from request' do
         subject.receive_data('foo')
-        subject.instance_eval { @uid }.should == @uid
+        subject.instance_eval { @uid }.should == uid
       end
     end
     
 
     it 'should save actual progress' do
       store = double
-      UploadProgress::ProgressDataStore.should_receive(:new).with(@uid) do
+      UploadProgress::ProgressDataStore.should_receive(:new).with(uid) do
         store
       end
       store.should_receive(:save).with(3)
@@ -82,8 +83,10 @@ describe UploadProgress::Handlers::Thin do
 
   describe 'when headers are not available yet' do
 
+    let(:env) { Hash.new }
+    let(:content_length) { 0 }
+    
     before do
-      unparsed_headers
       stub_const("UploadProgress::ProgressDataStore", FakeStore)
     end
     
@@ -103,17 +106,6 @@ describe UploadProgress::Handlers::Thin do
       subject.instance_eval { @progress_data_store }.should == nil
     end
     
-  end
-
-  def parsed_headers
-    @uid = '666'
-    env = {'QUERY_STRING' => "uid=#{@uid}"}
-    @request = FakeRequest.new(env, 100)
-  end
-  
-  def unparsed_headers
-    env = {}
-    @request = FakeRequest.new(env, 0)
   end
 
 end

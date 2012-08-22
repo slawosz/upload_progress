@@ -24,10 +24,10 @@ module UploadProgress
 
       def save_progress
         return unless uid
-        @progress_data_manager ||= begin
-                                     ProgressDataManager.new(@uid)
+        @progress_data_store ||= begin
+                                     ProgressDataStore.new(@uid)
                                    end
-        @progress_data_manager.save(@progress)        
+        @progress_data_store.save(@progress)        
       end
       
       def uid

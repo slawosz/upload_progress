@@ -14,16 +14,16 @@ module UploadProgress
     private
 
     def process_upload
-      @file_manager = FileManager.new(@env)
-      @file_manager.create_file
+      @attachment_manager = AttachmentManager.new(@env)
+      @attachment_manager.create_file
     end
     
     def prepare_body
-      description = DescriptionManager.new(@uid).get
+      description = DescriptionStore.new(@uid).get
       TemplateRenderer.new(@uid).render(TEMPLATE)
     end
 
-    class FileManager
+    class AttachmentManager
       include HasUid
 
       attr_reader :public_path
@@ -48,7 +48,7 @@ module UploadProgress
       private
 
       def save_file_name
-        UploadedFileManager.new(get_uid(@env)).save(@uploaded['files'][:filename])
+        UploadedFileStore.new(get_uid(@env)).save(@uploaded['files'][:filename])
       end
       
     end

@@ -1,5 +1,5 @@
 module UploadProgress
-  class ProgressDataManager < Manager
+  class ProgressDataStore < Store
     def key
       'progress'
     end

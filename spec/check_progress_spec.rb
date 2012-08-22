@@ -7,11 +7,11 @@ describe UploadProgress::CheckProgress do
   subject { UploadProgress::CheckProgress.new }
   
   it 'should return progress in header' do
-    manager = double
-    UploadProgress::ProgressDataManager.should_receive(:new).with('666') do
-      manager
+    store = double
+    UploadProgress::ProgressDataStore.should_receive(:new).with('666') do
+      store
     end
-    manager.should_receive(:get) { 25 }
+    store.should_receive(:get) { 25 }
     
     subject.call(@env).should == [200, {'Date' => Time.now.to_s, 'Content-Length' => '2', 'Content-Type' => 'text/html'}, '25']
   end

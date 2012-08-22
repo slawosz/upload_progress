@@ -8,7 +8,7 @@ module Thin
   end
 end
 
-class FakeManager
+class FakeStore
   def initialize(arg); end
   def save(arg); end
   def get; end

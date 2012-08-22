@@ -34,7 +34,7 @@ describe UploadProgress::Handlers::Thin do
   end
 
   it 'should call #receive_data from super' do
-    stub_const("UploadProgress::ProgressDataManager", FakeManager)
+    stub_const("UploadProgress::ProgressDataStore", FakeStore)
     
     parsed_headers
     
@@ -47,7 +47,7 @@ describe UploadProgress::Handlers::Thin do
 
     context do
       
-      before { stub_const("UploadProgress::ProgressDataManager", FakeManager) }
+      before { stub_const("UploadProgress::ProgressDataStore", FakeStore) }
       
       it 'should update progress' do
         subject.receive_data('foo') # foo.length == 3
@@ -69,11 +69,11 @@ describe UploadProgress::Handlers::Thin do
     
 
     it 'should save actual progress' do
-      manager = double
-      UploadProgress::ProgressDataManager.should_receive(:new).with(@uid) do
-        manager
+      store = double
+      UploadProgress::ProgressDataStore.should_receive(:new).with(@uid) do
+        store
       end
-      manager.should_receive(:save).with(3)
+      store.should_receive(:save).with(3)
 
       subject.receive_data('foo')      
     end
@@ -84,7 +84,7 @@ describe UploadProgress::Handlers::Thin do
 
     before do
       unparsed_headers
-      stub_const("UploadProgress::ProgressDataManager", FakeManager)
+      stub_const("UploadProgress::ProgressDataStore", FakeStore)
     end
     
     it 'should not calculate progress' do
@@ -100,7 +100,7 @@ describe UploadProgress::Handlers::Thin do
 
     it 'should not attempt to save progress' do
       subject.receive_data('foo')
-      subject.instance_eval { @progress_data_manager }.should == nil
+      subject.instance_eval { @progress_data_store }.should == nil
     end
     
   end

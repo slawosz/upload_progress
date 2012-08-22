@@ -1,5 +1,5 @@
 module UploadProgress
-  class DescriptionManager < Manager
+  class DescriptionStore < Store
     def key
       'description'
     end

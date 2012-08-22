@@ -13,11 +13,11 @@ module UploadProgress
     end
 
     def path
-      PUBLIC_UPLOADS_PATH + '/' + @uid.to_s + '/' + UploadedFileManager.new(@uid).get
+      PUBLIC_UPLOADS_PATH + '/' + @uid.to_s + '/' + UploadedFileStore.new(@uid).get
     end
 
     def description
-      DescriptionManager.new(@uid).get
+      DescriptionStore.new(@uid).get
     end
     
   end

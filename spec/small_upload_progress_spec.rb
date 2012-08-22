@@ -3,9 +3,9 @@ require 'spec_helper'
 describe UploadProgress::SmallUploadProgress do
 
   it 'should set progress when content is small' do
-    progress_manager = double
-    UploadProgress::ProgressDataManager.should_receive(:new).with('666') { progress_manager }
-    progress_manager.should_receive(:save).with('100'
+    progress_store = double
+    UploadProgress::ProgressDataStore.should_receive(:new).with('666') { progress_store }
+    progress_store.should_receive(:save).with('100'
                                                 )
 
     @io = StringIO.new
@@ -15,7 +15,7 @@ describe UploadProgress::SmallUploadProgress do
   end
 
   it 'should not set progress when content is big' do
-    UploadProgress::ProgressDataManager.should_not_receive(:new)
+    UploadProgress::ProgressDataStore.should_not_receive(:new)
 
     @io = Tempfile.new('/tmp/foo')
 

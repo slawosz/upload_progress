@@ -1,5 +1,5 @@
 module UploadProgress
-  class UploadedFileManager < Manager
+  class UploadedFileStore < Store
     def key
       'file_name'
     end

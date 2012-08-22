@@ -17,13 +17,13 @@ describe UploadProgress::TemplateRenderer do
   end
 
   def set_data_expectations_and_mocks
-    description_manager = double
-    UploadProgress::DescriptionManager.should_receive(:new).with(uid) { description_manager }
-    description_manager.should_receive(:get) { 'description' }
+    description_store = double
+    UploadProgress::DescriptionStore.should_receive(:new).with(uid) { description_store }
+    description_store.should_receive(:get) { 'description' }
     
-    uploaded_file_manager = double
-    UploadProgress::UploadedFileManager.should_receive(:new).with(uid) { uploaded_file_manager }
-    uploaded_file_manager.should_receive(:get) { 'fixture.txt' }
+    uploaded_file_store = double
+    UploadProgress::UploadedFileStore.should_receive(:new).with(uid) { uploaded_file_store }
+    uploaded_file_store.should_receive(:get) { 'fixture.txt' }
   end
 
 end

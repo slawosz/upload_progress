@@ -1,7 +1,7 @@
 require 'redis'
 
 module UploadProgress
-  class Manager
+  class Store
 
     def initialize(uid)
       @uid = uid

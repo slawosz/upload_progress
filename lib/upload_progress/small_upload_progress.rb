@@ -11,7 +11,7 @@ module UploadProgress
     def call(env)
       @env = env
       if small_upload_body?
-        ProgressDataManager.new(get_uid(env)).save('100')
+        ProgressDataStore.new(get_uid(env)).save('100')
       end
       @app.call(env)
     end

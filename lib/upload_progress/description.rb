@@ -9,7 +9,7 @@ module UploadProgress
       save_description
       
       renderer  = TemplateRenderer.new(@uid)
-      if ProgressDataManager.new(@uid).get == '100'
+      if ProgressDataStore.new(@uid).get == '100'
         return [200, {}, renderer.render(DESCRIPTION_TEMPLATE)]
       else
         return [200, {}, renderer.render(DESCRIPTION_PENDING_TEMPLATE)]
@@ -19,7 +19,7 @@ module UploadProgress
     private
 
     def save_description
-      dm = DescriptionManager.new(@uid)
+      dm = DescriptionStore.new(@uid)
       dm.save(description)
     end
 

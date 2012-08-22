@@ -25,7 +25,7 @@ describe UploadProgress::Upload do
   end
   
   it 'should create directory for files properly' do
-    stub_const('UploadProgress::DescriptionManager', FakeManager)
+    stub_const('UploadProgress::DescriptionStore', FakeStore)
     stub_const('UploadProgress::TemplateRenderer', FakeTemplateRenderer)
     
     names = %w( 123 231 312 )
@@ -42,15 +42,15 @@ describe UploadProgress::Upload do
   end
 
   def set_data_expectations_and_mocks
-    description_manager = double
+    description_store = double
     description = double
-    UploadProgress::DescriptionManager.should_receive(:new) { description_manager }
-    description_manager.should_receive(:get) { description }
+    UploadProgress::DescriptionStore.should_receive(:new) { description_store }
+    description_store.should_receive(:get) { description }
     
-    uploaded_file_manager = double
+    uploaded_file_store = double
     description = double
-    UploadProgress::UploadedFileManager.should_receive(:new) { uploaded_file_manager }
-    uploaded_file_manager.should_receive(:save).with('fixture.txt')
+    UploadProgress::UploadedFileStore.should_receive(:new) { uploaded_file_store }
+    uploaded_file_store.should_receive(:save).with('fixture.txt')
 
     up = double
     UploadProgress::TemplateRenderer.should_receive(:new).with('666') { up }

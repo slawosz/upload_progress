@@ -5,15 +5,15 @@ describe UploadProgress::Description do
   subject { UploadProgress::Description.new }
 
   before do
-    progress_manager = double
-    UploadProgress::ProgressDataManager.stub(:new) { progress_manager }
-    progress_manager.should_receive(:get) { progress }
+    progress_store = double
+    UploadProgress::ProgressDataStore.stub(:new) { progress_store }
+    progress_store.should_receive(:get) { progress }
     
     stub_const(template_const, fixture_path)
     
-    description_manager = double
-    UploadProgress::DescriptionManager.stub(:new).with('666') { description_manager }
-    description_manager.should_receive(:save).with('foo bar')
+    description_store = double
+    UploadProgress::DescriptionStore.stub(:new).with('666') { description_store }
+    description_store.should_receive(:save).with('foo bar')
 
     renderer = double
     UploadProgress::TemplateRenderer.should_receive(:new).with('666') { renderer }

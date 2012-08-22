@@ -12,6 +12,9 @@
         setUid();
         form.action = formActionUrl + currentUid;
         form.submit();
+        document.getElementById('description').innerHTML = '';
+        document.getElementById('link').innerHTML = '';
+        document.getElementById('progress').innerHTML = '';
         enableDescriptionEditing();
         traceProgress(currentUid);
       }
@@ -38,14 +41,16 @@
           }
         };
         xhr.setRequestHeader("If-Modified-Since","Sat, 1 Jan 2000 00:00:00 GMT");
-        d = new Date();
-        t = d.getTime();
-        thetimestring = t.toString(10);
-        xhr.send(thetimestring); 
+        xhr.send(); 
       }
 
       function displayPercent(value) {
-        document.getElementById('progress').innerHTML = 'Status: ' + value + '%';
+        if (value === '' || value === null) {
+          display = 'Status: Not started';
+        } else {
+          display = 'Status: ' + value + '%';
+        }
+        document.getElementById('progress').innerHTML = display;
       }
 
       function setUid() {
@@ -58,17 +63,31 @@
       }
 
       function submitDescription(form) {
-        var xhr = new XMLHttpRequest();
+        var description = document.getElementById('descriptionForm').elements('descriptionField').value;
+        description = 'description=' + description;
+        xhr = null;
+        xhr = new XMLHttpRequest();
         xhr.open('POST', '/description?uid=' + currentUid, true);
-        formData = new FormData(form);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             eval(xhr.responseText);
           }
         }
-        xhr.send(formData);
+        xhr.setRequestHeader("If-Modified-Since","Sat, 1 Jan 2000 00:00:00 GMT");
+        xhr.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        xhr.setRequestHeader("Content-length", description.length);
+        xhr.setRequestHeader("Connection", "close");
+        xhr.send(description);
         return false;
       }
+
+      function init() {
+        document.getElementById('descriptionForm').onsubmit = function(){
+          return submitDescription(this);
+          return false;
+        }
+      }
+      window.onload = init;
     </script>
   </head>
   <body>
@@ -81,8 +100,8 @@
     </div>
     <div id="description">
     </div>
-    <form method="post" onSubmit="return submitDescription(this)">
-      <textarea id='description' name='description'></textarea>
+    <form method="post" id="descriptionForm">
+      <textarea id='descriptionText' name='descriptionField'></textarea>
       <input type="submit" id="submit-description" disabled="true"/>
     </form>
     <iframe name='uploader' style='display: none'/>

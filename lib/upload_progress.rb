@@ -1,3 +1,5 @@
+require "rubygems"
+require "bundler/setup"
 require_relative 'upload_progress/has_uid.rb'
 require_relative 'upload_progress/upload_calculator.rb'
 require_relative 'upload_progress/store.rb'

@@ -17,7 +17,7 @@ module UploadProgress
   ROOT_PATH = "#{File.dirname(__FILE__)}/.."
   UPLOADS_PATH = '/public/uploads'
   PUBLIC_UPLOADS_PATH = '/uploads'
-  TEMPLATE = ROOT_PATH + '/lib/upload_progress/template.html'
-  DESCRIPTION_TEMPLATE = ROOT_PATH + '/lib/upload_progress/description.js'
-  DESCRIPTION_PENDING_TEMPLATE = ROOT_PATH + '/lib/upload_progress/description_pending.js'
+  TEMPLATE = ROOT_PATH + '/lib/upload_progress/templates/upload_complete.html'
+  DESCRIPTION_TEMPLATE = ROOT_PATH + '/lib/upload_progress/templates/description.js'
+  DESCRIPTION_PENDING_TEMPLATE = ROOT_PATH + '/lib/upload_progress/templates/description_pending.js'
 end

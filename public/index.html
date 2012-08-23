@@ -83,7 +83,10 @@
         xhr.open('POST', '/description?uid=' + currentUid, true);
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
-            eval(xhr.responseText);
+            var text = xhr.responseText;
+            document.getElementById('description').innerHTML = '';
+            window.eval(text);
+            text = null;
           }
         }
         xhr.setRequestHeader("If-Modified-Since","Sat, 1 Jan 2000 00:00:00 GMT");

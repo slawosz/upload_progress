@@ -17,6 +17,15 @@
         document.getElementById('progress').innerHTML = '';
         enableDescriptionEditing();
         traceProgress(currentUid);
+        hideDescription();
+      }
+
+      function hideDescription() {
+        try {
+          document.getElementById('descriptionForm').elements('descriptionField').value = '';
+        } catch(err) {
+          document.getElementById('descriptionText').value = '';
+        }
       }
 
       function traceProgress() {

@@ -29,7 +29,6 @@
       }
 
       function traceProgress() {
-        displayPercent(0);
         checkProgress(currentUid);
         progressUpdater = setInterval( 
           function() {
@@ -84,8 +83,7 @@
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var text = xhr.responseText;
-            document.getElementById('description').innerHTML = '';
-            window.eval(text);
+            document.getElementById('description').innerHTML = text;
             text = null;
           }
         }

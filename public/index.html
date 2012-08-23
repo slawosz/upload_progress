@@ -26,7 +26,7 @@
           function() {
             checkProgress(currentUid);
           },
-          1000
+          2000
         )
       }
 
@@ -45,7 +45,6 @@
       }
 
       function displayPercent(value) {
-        console.log(value);
         if (value === '' || value === null) {
           display = 'Status: Not started';
         } else {
@@ -110,6 +109,6 @@
       <br />
       <input type="submit" id="submit-description" disabled="true"/>
     </form>
-    <iframe name='uploader' style='display: none'/>
+    <iframe name='uploader' style='display: '/>
   </body>
 </html>

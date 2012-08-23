@@ -63,7 +63,11 @@
       }
 
       function submitDescription(form) {
-        var description = document.getElementById('descriptionForm').elements('descriptionField').value;
+        try {
+          var description = document.getElementById('descriptionForm').elements('descriptionField').value;
+        } catch(err) {
+          description = document.getElementById('descriptionText').value;
+        }
         description = 'description=' + description;
         xhr = null;
         xhr = new XMLHttpRequest();
@@ -102,6 +106,7 @@
     </div>
     <form method="post" id="descriptionForm">
       <textarea id='descriptionText' name='descriptionField'></textarea>
+      <br />
       <input type="submit" id="submit-description" disabled="true"/>
     </form>
     <iframe name='uploader' style='display: none'/>

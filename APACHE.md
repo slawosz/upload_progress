@@ -1,3 +1,5 @@
+Apache config working with this thin configuration: `thin -p 5000 -s 3 -R app.ru -r /home/slawosz/sc-research/upload_progress/lib/upload_progress.rb -b Thin::Backends::UploadProgressBackend -e production start`
+
 ```apache
 <VirtualHost *:80>
   ServerName sc.slawosz.com

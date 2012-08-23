@@ -26,8 +26,6 @@ module UploadProgress
     class AttachmentManager
       include HasUid
 
-      attr_reader :public_path
-      
       def initialize(env)
         @env = env
         @uploaded = Rack::Multipart.parse_multipart(env)
@@ -42,7 +40,6 @@ module UploadProgress
         
         move_to = UPLOADS_PATH + new_location
         FileUtils.cp(file[:tempfile].path, ROOT_PATH + move_to)
-        @public_path = PUBLIC_UPLOADS_PATH + new_location
       end
 
       private

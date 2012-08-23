@@ -30,7 +30,7 @@ describe UploadProgress::Description do
       status, _env, body = subject.call(env)
 
       status.should == 200
-      _env.should == {}
+      _env.should == {'Content-Type' => 'application/javascript; charset=utf-8'}
       body.should == 'body'
     end
   end
@@ -49,7 +49,7 @@ describe UploadProgress::Description do
       status, _env, body = subject.call(env)
       
       status.should == 200
-      _env.should == {}
+      _env.should == {'Content-Type' => 'application/javascript; charset=utf-8'}
       body.should == 'pending'
     end
   end

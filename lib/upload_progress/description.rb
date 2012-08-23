@@ -10,9 +10,9 @@ module UploadProgress
       
       renderer = TemplateRenderer.new(@uid)
       if ProgressDataStore.new(@uid).get == '100'
-        return [200, {}, renderer.render(DESCRIPTION_TEMPLATE)]
+        return [200, {'Content-Type' => 'application/javascript; charset=utf-8'}, renderer.render(DESCRIPTION_TEMPLATE)]
       else
-        return [200, {}, renderer.render(DESCRIPTION_PENDING_TEMPLATE)]
+        return [200, {'Content-Type' => 'application/javascript; charset=utf-8'}, renderer.render(DESCRIPTION_PENDING_TEMPLATE)]
       end
     end
 

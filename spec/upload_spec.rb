@@ -18,7 +18,7 @@ describe UploadProgress::Upload do
     set_data_expectations_and_mocks
     
     status = 200
-    headers = {}
+    headers = {'Content-Type' => 'text/html; charset=utf-8'}
     body = 'body'
 
     subject.call(@env).should == [status, headers, body]

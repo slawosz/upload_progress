@@ -8,7 +8,7 @@ module UploadProgress
       @env = env
       @uid = get_uid(@env)
       process_upload
-      [200, {}, prepare_body]
+      [200, {'Content-Type' => 'text/html; charset=utf-8'}, prepare_body]
     end
 
     private

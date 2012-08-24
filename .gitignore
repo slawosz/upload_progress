@@ -1,2 +1,5 @@
 public/uploads/*
 spec/fixtures/uploads/*
+tmp/
+log/
+.rvmrc

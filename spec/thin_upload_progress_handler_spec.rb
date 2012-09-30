@@ -27,6 +27,24 @@ class FooConnection < BaseConnection
   include UploadProgress::Handlers::Thin
 end
 
+shared_examples "do not handle progress" do
+  it 'should not calculate progress' do
+    subject.receive_data('foo')
+
+    subject.instance_eval { @progress }.should == nil
+  end
+
+  it 'should not get uid' do
+    subject.receive_data('foo')
+    subject.instance_eval { @uid }.should == nil
+  end
+
+  it 'should not attempt to save progress' do
+    subject.receive_data('foo')
+    subject.instance_eval { @progress_data_store }.should == nil
+  end
+end
+
 describe UploadProgress::Handlers::Thin do
 
   let(:uid) { '666' }
@@ -67,7 +85,12 @@ describe UploadProgress::Handlers::Thin do
         subject.instance_eval { @uid }.should == uid
       end
     end
-    
+
+    describe 'when uid params is not available' do
+      let(:env) { {'QUERY_STRING' => "foo=bar"} }
+      
+      it_behaves_like "do not handle progress"
+    end
 
     it 'should save actual progress' do
       store = double
@@ -90,21 +113,7 @@ describe UploadProgress::Handlers::Thin do
       stub_const("UploadProgress::ProgressDataStore", FakeStore)
     end
     
-    it 'should not calculate progress' do
-      subject.receive_data('foo')
-
-      subject.instance_eval { @progress }.should == nil
-    end
-
-    it 'should not get uid' do
-      subject.receive_data('foo')
-      subject.instance_eval { @uid }.should == nil
-    end
-
-    it 'should not attempt to save progress' do
-      subject.receive_data('foo')
-      subject.instance_eval { @progress_data_store }.should == nil
-    end
+    it_behaves_like "do not handle progress"
     
   end
 

@@ -1,12 +1,9 @@
 module UploadProgress
   class UploadCalculator
 
-    def initialize(uploaded, content_length)
+    def self.calculate(uploaded, content_length)
       @uploaded = uploaded
       @content_length = content_length
-    end
-
-    def calculate
       return 0 if empty_content_length?
       result = @uploaded.to_f / @content_length.to_f
       result *= 100
@@ -16,7 +13,7 @@ module UploadProgress
 
     private
 
-    def empty_content_length?
+    def self.empty_content_length?
       @content_length.nil? || @content_length == 0
     end
         

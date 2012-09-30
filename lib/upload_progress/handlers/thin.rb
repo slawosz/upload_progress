@@ -19,7 +19,7 @@ module UploadProgress
       
       def handle_upload_progress
         return unless uid
-        @progress = UploadCalculator.new(@uploaded, @request.content_length).calculate
+        @progress = UploadCalculator.calculate(@uploaded, @request.content_length)
       end
 
       def save_progress

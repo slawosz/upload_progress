@@ -84,7 +84,8 @@
         xhr.onreadystatechange = function() {
           if (xhr.readyState == 4) {
             var text = xhr.responseText;
-            document.getElementById('description').innerHTML = text;
+            // document.getElementById('description').innerHTML = text;
+            eval(text);
             text = null;
           }
         }

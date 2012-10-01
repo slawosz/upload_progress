@@ -5,6 +5,7 @@ describe UploadProgress::UidGetter do
   it 'should pass uid to headers' do
     u = UploadProgress::UidGetter.new(app)
     expect { u.call(env) }.to_not raise_error(RuntimeError)
+    expect { u.call(env) }.to_not raise_error(ArgumentError)
   end
 
   def app
